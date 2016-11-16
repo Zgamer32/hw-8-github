@@ -1,14 +1,14 @@
 
-package cs311.hw7.graphalgorithms;
-
-import cs311.hw7.graph.Graph;
-import cs311.hw7.graph.IGraph;
-import cs311.hw7.graph.IGraph.Edge;
-import cs311.hw7.graph.IGraph.Vertex;
+package cs311.hw8.graphalgorithms;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
+import cs311.hw8.graph.Graph;
+import cs311.hw8.graph.IGraph;
+import cs311.hw8.graph.IGraph.Edge;
+import cs311.hw8.graph.IGraph.Vertex;
 
 public class GraphAlgorithms
 {

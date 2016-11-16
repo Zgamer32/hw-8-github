@@ -1,4 +1,4 @@
-package cs311.hw7.graph;
+package cs311.hw8.graph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,7 @@ public class Graph<V, E> implements IGraph<V, E> {
 				//if not equal set data to null and continue
 				if(edges.get(i).getEdgeData()!=newEdges.get(addressOfDuplicate).getEdgeData())
 				{
-					newEdges.set(addressOfDuplicate, new cs311.hw7.graph.IGraph.Edge<E>(newEdges.get(addressOfDuplicate).getVertexName1(),newEdges.get(addressOfDuplicate).getVertexName2(),null));
+					newEdges.set(addressOfDuplicate, new cs311.hw8.graph.IGraph.Edge<E>(newEdges.get(addressOfDuplicate).getVertexName1(),newEdges.get(addressOfDuplicate).getVertexName2(),null));
 				}
 				//If above isn't run then they are equal so we just don't add the edge
 			}
@@ -96,10 +96,10 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * 
 	 * @param the name of the vertex
 	 * 
-	 * @throws cs311.hw7.graph.IGraph.DuplicateVertexException
+	 * @throws cs311.hw8.graph.IGraph.DuplicateVertexException
 	 */
 	@Override
-	public void addVertex(String vertexName) throws cs311.hw7.graph.IGraph.DuplicateVertexException 
+	public void addVertex(String vertexName) throws cs311.hw8.graph.IGraph.DuplicateVertexException 
 	{
 		//If no data is given then add a vertex with null data
 		//Why have duplicate code, just use the full method but with null being given.
@@ -110,16 +110,16 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * Adds a vertex with vertexName and vertexData but no edges. Checks if there is a duplicate vertex by name.
 	 * @param vertexName Name of new Vertex
 	 * @param vertexData Data of new Vertex
-	 * @throws cs311.hw7.graph.IGraph.DuplicateVertexException
+	 * @throws cs311.hw8.graph.IGraph.DuplicateVertexException
 	 */
 	@Override
-	public void addVertex(String vertexName, V vertexData) throws cs311.hw7.graph.IGraph.DuplicateVertexException 
+	public void addVertex(String vertexName, V vertexData) throws cs311.hw8.graph.IGraph.DuplicateVertexException 
 	{
 		//If you are able to get the vertex than the vertex exists already
 		//I couldn't think of any other ways to check for vertices other than iterating through my list
 		//So I figured why write it in multiple places. The get method contains the code for searching
 		//and doesn't do anything other than return the vertex or null so it works well for a find method
-		if(this.getVertex(vertexName)!=null) throw new cs311.hw7.graph.IGraph.DuplicateVertexException();
+		if(this.getVertex(vertexName)!=null) throw new cs311.hw8.graph.IGraph.DuplicateVertexException();
 		vertices.add(new Vertex<V>(vertexName, vertexData));
 		
 	}
@@ -130,11 +130,11 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * vertices with the given names.
 	 * @param vertex1 First vertex to connect from.
 	 * @param vertex2 Second vertex to connect from. This is where the direction head in a directed graph.
-	 * @throws cs311.hw7.graph.IGraph.DuplicateEdgeException
-	 * @throws cs311.hw7.graph.IGraph.NoSuchVertexException
+	 * @throws cs311.hw8.graph.IGraph.DuplicateEdgeException
+	 * @throws cs311.hw8.graph.IGraph.NoSuchVertexException
 	 */
 	@Override
-	public void addEdge(String vertex1, String vertex2) throws cs311.hw7.graph.IGraph.DuplicateEdgeException, cs311.hw7.graph.IGraph.NoSuchVertexException 
+	public void addEdge(String vertex1, String vertex2) throws cs311.hw8.graph.IGraph.DuplicateEdgeException, cs311.hw8.graph.IGraph.NoSuchVertexException 
 	{
 		//Same reasons as for the dataless vertex method. It doesnt take any longer and
 		//keeps line count down. Also reduces the chance that i forget to fix both methods should something change.
@@ -147,28 +147,28 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * @param vertex1	First vertex and origin of edge
 	 * @param vertex2	Second vertex and destination of edge
 	 * @param edgeData	Data of edge ie. weight
-	 * @throws cs311.hw7.graph.IGraph.DuplicateEdgeException
-	 * @throws cs311.hw7.graph.IGraph.NoSuchVertexException
+	 * @throws cs311.hw8.graph.IGraph.DuplicateEdgeException
+	 * @throws cs311.hw8.graph.IGraph.NoSuchVertexException
 	 */
 	@Override
-	public void addEdge(String vertex1, String vertex2, E edgeData) throws cs311.hw7.graph.IGraph.DuplicateEdgeException, cs311.hw7.graph.IGraph.NoSuchVertexException 
+	public void addEdge(String vertex1, String vertex2, E edgeData) throws cs311.hw8.graph.IGraph.DuplicateEdgeException, cs311.hw8.graph.IGraph.NoSuchVertexException 
 	{
 		//As stated before, this method performs the search just as well and will reduce
 		//the chance of error as the code is only in one place so any changes are all
 		//within the same method. If I can get it from the get method it exists.
-		if(this.getVertex(vertex1)==null) throw new cs311.hw7.graph.IGraph.NoSuchVertexException();
-		if(this.getVertex(vertex2)==null) throw new cs311.hw7.graph.IGraph.NoSuchVertexException();		
+		if(this.getVertex(vertex1)==null) throw new cs311.hw8.graph.IGraph.NoSuchVertexException();
+		if(this.getVertex(vertex2)==null) throw new cs311.hw8.graph.IGraph.NoSuchVertexException();		
 		
 		//Same principle as above except now with vertices. Funny story I had this check correct earlier than
 		//the two above, where I called the get method but without checking for null. Why I didn't notice it
 		//untill adding in more comments I don't know.
-		if(this.getEdge(vertex1, vertex2)!=null) throw new cs311.hw7.graph.IGraph.DuplicateEdgeException();
+		if(this.getEdge(vertex1, vertex2)!=null) throw new cs311.hw8.graph.IGraph.DuplicateEdgeException();
 		
 		//If the graph isn't directed
 		if(undirected)
 		{
 			//Perform an additional check for the vertexes in reverse
-			if(this.getEdge(vertex2, vertex1)!=null) throw new cs311.hw7.graph.IGraph.DuplicateEdgeException();
+			if(this.getEdge(vertex2, vertex1)!=null) throw new cs311.hw8.graph.IGraph.DuplicateEdgeException();
 		}
 		//At this point if an exception hasn't been thrown then it is safe to add.
 		edges.add(new Edge<E>(vertex1,vertex2,edgeData));
@@ -178,16 +178,16 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * Returns type <V> data from vertex vertexName if vertex exists.
 	 * @param vertexName Name of vertex
 	 * @return	<V> data in vertex
-	 * @throws cs311.hw7.graph.IGraph.NoSuchVertexException
+	 * @throws cs311.hw8.graph.IGraph.NoSuchVertexException
 	 */
 	@Override
-	public V getVertexData(String vertexName) throws cs311.hw7.graph.IGraph.NoSuchVertexException 
+	public V getVertexData(String vertexName) throws cs311.hw8.graph.IGraph.NoSuchVertexException 
 	{
 		//Use the get method for the same reasons
 		Vertex<V> vertex=this.getVertex(vertexName);
 		
 		//If the method returns null than the vertex doesn't exists
-		if(vertex==null) throw new cs311.hw7.graph.IGraph.NoSuchVertexException();
+		if(vertex==null) throw new cs311.hw8.graph.IGraph.NoSuchVertexException();
 		
 		//If the exception was thrown than this wont be run. Otherise return the data.
 		return vertex.getVertexData();
@@ -198,10 +198,10 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * a new vertex with the new data.
 	 * @param vertexName Name of vertex to change
 	 * @param vertexData Data to change vertex to
-	 * @throws cs311.hw7.graph.IGraph.NoSuchVertexException
+	 * @throws cs311.hw8.graph.IGraph.NoSuchVertexException
 	 */
 	@Override
-	public void setVertexData(String vertexName, V vertexData) throws cs311.hw7.graph.IGraph.NoSuchVertexException 
+	public void setVertexData(String vertexName, V vertexData) throws cs311.hw8.graph.IGraph.NoSuchVertexException 
 	{
 		//In this case I put the code in two places, as for this method I needed the location of the vertex also
 	
@@ -220,7 +220,7 @@ public class Graph<V, E> implements IGraph<V, E> {
 		}
 		//If we make it here than the vertex was never found and the return statment not ran
 		//So we throw the exception
-		throw new cs311.hw7.graph.IGraph.NoSuchVertexException();
+		throw new cs311.hw8.graph.IGraph.NoSuchVertexException();
 		
 	}
 
@@ -229,21 +229,21 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * @param vertex1	Source Vertex
 	 * @param vertex2	Destinatiopn vertex
 	 * @return	Data of edge between vertices
-	 * @throws cs311.hw7.graph.IGraph.NoSuchVertexException
-	 * @throws cs311.hw7.graph.IGraph.NoSuchEdgeException
+	 * @throws cs311.hw8.graph.IGraph.NoSuchVertexException
+	 * @throws cs311.hw8.graph.IGraph.NoSuchEdgeException
 	 */
 	@Override
-	public E getEdgeData(String vertex1, String vertex2) throws cs311.hw7.graph.IGraph.NoSuchVertexException, cs311.hw7.graph.IGraph.NoSuchEdgeException 
+	public E getEdgeData(String vertex1, String vertex2) throws cs311.hw8.graph.IGraph.NoSuchVertexException, cs311.hw8.graph.IGraph.NoSuchEdgeException 
 	{
 		//First we need to check if the vertices exist as the getEdgemethod wont tell us if it can't find
 		//it due to missing vertices or if the edge simply doesn't exists
-		if(this.getVertex(vertex1)==null||this.getVertex(vertex2)==null) throw new cs311.hw7.graph.IGraph.NoSuchVertexException();
+		if(this.getVertex(vertex1)==null||this.getVertex(vertex2)==null) throw new cs311.hw8.graph.IGraph.NoSuchVertexException();
 
 		//Like so many methods before it. This too uses the get method
 		//But we just do like we did with the get vertexData method but with edges
 		//and an additional check at the top
 		Edge<E> edge=this.getEdge(vertex1,vertex2);
-		if(edge==null) throw new cs311.hw7.graph.IGraph.NoSuchEdgeException();
+		if(edge==null) throw new cs311.hw8.graph.IGraph.NoSuchEdgeException();
 		return edge.getEdgeData();
 	}
 
@@ -252,14 +252,14 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * @param vertex1 First vertex, source in directed graphs
 	 * @param vertex2 Second vertex, destination in directed graphs
 	 * @param edgeData New data for the edge
-	 * @throws cs311.hw7.graph.IGraph.NoSuchVertexException
-	 * @throws cs311.hw7.graph.IGraph.NoSuchEdgeException
+	 * @throws cs311.hw8.graph.IGraph.NoSuchVertexException
+	 * @throws cs311.hw8.graph.IGraph.NoSuchEdgeException
 	 */
 	@Override
-	public void setEdgeData(String vertex1, String vertex2, E edgeData)	throws cs311.hw7.graph.IGraph.NoSuchVertexException, cs311.hw7.graph.IGraph.NoSuchEdgeException 
+	public void setEdgeData(String vertex1, String vertex2, E edgeData)	throws cs311.hw8.graph.IGraph.NoSuchVertexException, cs311.hw8.graph.IGraph.NoSuchEdgeException 
 	{
 		//Check for valid vertex just like in the get edgeData method
-		if(this.getVertex(vertex1)==null||this.getVertex(vertex2)==null) throw new cs311.hw7.graph.IGraph.NoSuchVertexException();
+		if(this.getVertex(vertex1)==null||this.getVertex(vertex2)==null) throw new cs311.hw8.graph.IGraph.NoSuchVertexException();
 		
 		//Just like in the setVertexData, we have to have the duplicate code here so
 		//we can get the index of the edge
@@ -288,7 +288,7 @@ public class Graph<V, E> implements IGraph<V, E> {
 		}
 		
 		//If we didn't exit the method yet than the edge wasn't found
-		throw new cs311.hw7.graph.IGraph.NoSuchEdgeException();
+		throw new cs311.hw8.graph.IGraph.NoSuchEdgeException();
 	}
 
 	/**
@@ -298,7 +298,7 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * @return The verte of the given name, or null if it doens't exist.
 	 */
 	@Override
-	public cs311.hw7.graph.IGraph.Vertex<V> getVertex(String VertexName) 
+	public cs311.hw8.graph.IGraph.Vertex<V> getVertex(String VertexName) 
 	{
 		//I couldn't think of another way to find the vertex and since we weren't given any time
 		//restrictions so I just iterated through the list.
@@ -322,7 +322,7 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * @return Edge if it exists or null if it doesn't
 	 */
 	@Override
-	public cs311.hw7.graph.IGraph.Edge<E> getEdge(String vertexName1, String vertexName2) 
+	public cs311.hw8.graph.IGraph.Edge<E> getEdge(String vertexName1, String vertexName2) 
 	{
 		//
 		if(undirected)
@@ -357,7 +357,7 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * @return List of all vertices in the graph
 	 */
 	@Override
-	public List<cs311.hw7.graph.IGraph.Vertex<V>> getVertices() {
+	public List<cs311.hw8.graph.IGraph.Vertex<V>> getVertices() {
 		return vertices;
 	}
 
@@ -366,7 +366,7 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * @return List of all edges in the graph
 	 */
 	@Override
-	public List<cs311.hw7.graph.IGraph.Edge<E>> getEdges() {
+	public List<cs311.hw8.graph.IGraph.Edge<E>> getEdges() {
 		return edges;
 	}
 
@@ -376,9 +376,9 @@ public class Graph<V, E> implements IGraph<V, E> {
 	 * @return List of all vertices that this vertex conneccts to.
 	 */
 	@Override
-	public List<cs311.hw7.graph.IGraph.Vertex<V>> getNeighbors(String vertex) {
+	public List<cs311.hw8.graph.IGraph.Vertex<V>> getNeighbors(String vertex) {
 		//The list of neighbors to be returned
-		List<cs311.hw7.graph.IGraph.Vertex<V>> neighbors=new ArrayList<cs311.hw7.graph.IGraph.Vertex<V>>();
+		List<cs311.hw8.graph.IGraph.Vertex<V>> neighbors=new ArrayList<cs311.hw8.graph.IGraph.Vertex<V>>();
 		
 		//For all the edges
 		for(int i=0;i<edges.size();i++)

@@ -1,4 +1,4 @@
-package cs311.hw7.graphalgorithms;
+package cs311.hw8.graphalgorithms;
 
 public interface IWeight
 {
