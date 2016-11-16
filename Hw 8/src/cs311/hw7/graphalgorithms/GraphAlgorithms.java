@@ -1,0 +1,308 @@
+
+package cs311.hw7.graphalgorithms;
+
+import cs311.hw7.graph.Graph;
+import cs311.hw7.graph.IGraph;
+import cs311.hw7.graph.IGraph.Edge;
+import cs311.hw7.graph.IGraph.Vertex;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+public class GraphAlgorithms
+{
+	/**
+	 * 
+	 * @param g
+	 * @return
+	 */
+    public static <V, E> List<Vertex<V>> TopologicalSort( IGraph<V, E> g)
+    {
+    	//First find verticies with in-degree zero
+    	
+    	List<Vertex<V>> vertices=g.getVertices();
+    	
+    	int[] indegreeOfVertex=new int[vertices.size()];
+    	
+    	//For each vertex initialize the array to 0
+    	for(int i=0;i<vertices.size();i++)
+    	{
+    		
+    		indegreeOfVertex[i]=0;
+    	}
+    	//for each vertex
+    	for(int i=0;i<vertices.size();i++)
+    	{
+    		//find its neighbors
+    		List<Vertex<V>> neighborsOfVI= g.getNeighbors(vertices.get(i).getVertexName());
+    		//And for each vertex in the neighbor list, increase their indegree.
+    		for(int j=0;j<neighborsOfVI.size();j++)
+    		{
+    			//Such method calls. Much getting. Wow.
+    			indegreeOfVertex[vertices.indexOf(neighborsOfVI.get(j))]+=1;
+    		}
+    		
+    	}    	
+    	//We now have a valid vertices to start our searches from
+    	
+    	//Make a stack to hold the nodes that have been sorted
+    	Stack<Vertex<V>> sorted = new Stack<Vertex<V>>();
+    	
+    	//Then perform dfs on each of the vertices with indegree of 0. As these are all possilbe locations to start
+    	for(int a=0;a<vertices.size();a++)
+    	{
+    		if(indegreeOfVertex[a]==0)myDfs(sorted,g,vertices.get(a));
+    	}
+    	
+    	//This was code from before I found a different and better way to make sure all indegree zero vertices were 
+    	//used, it just looks for any vertices that havent been added yet. I realized after that this could have had
+    	//bad results if it encountered a vertex that wasnt indegree zero but hadnt been discovered. As in, it hit a node that
+    	//was part of a seprerate portion of the graph from the main
+    	
+//    	while(sorted.size()!=vertices.size())
+//    	{
+//    		//for all vertices
+//    		for(int a=0;a<vertices.size();a++)
+//    		{
+//   			//if it is already in the stack we needn't do anything
+//    			if(!sorted.contains(vertices.get(a)))
+//    			{
+//    				//But if not do Dfs from it, as it may be separate from the herd and may have
+//    				//many children that weren't connected to the first one we used.
+//    				myDfs(sorted,g,vertices.get(a));
+//    			}
+//    		}
+//    	}
+    	
+    	//Once all vertices have been added, we pop from the stack onto a list so the order is 
+    	//reversed and you have a valid topological sort
+    	List<Vertex<V>> returnList = new ArrayList<Vertex<V>>();
+    	
+    	while(!sorted.isEmpty())
+    	{
+    		
+			returnList.add(sorted.pop());
+    	}
+    	return returnList;
+    }
+    
+    /**
+     * 
+     * @param g
+     * @return
+     */
+    public static <V, E> List<List<Vertex<V>>> AllTopologicalSort( IGraph<V, E> g )
+    {
+    	List<List<Vertex<V>>> returnList=new ArrayList<List<Vertex<V>>>();
+    	//First find all 0 indegree edges
+    	
+    	List<Vertex<V>> vertices=g.getVertices();
+    	//System.out.println(vertices.size());
+    	int[] indegreeOfVertex=new int[vertices.size()];
+    	
+    	//For each vertex initialize the array to 0
+    	for(int i=0;i<vertices.size();i++)
+    	{
+    		
+    		indegreeOfVertex[i]=0;
+    	}
+    	//for each vertex
+    	for(int i=0;i<vertices.size();i++)
+    	{
+    		//find its neighbors
+    		List<Vertex<V>> neighborsOfVI= g.getNeighbors(vertices.get(i).getVertexName());
+    		//And for each vertex in the neighbor list, increase their indegree.
+    		for(int j=0;j<neighborsOfVI.size();j++)
+    		{
+    			//Such method calls. Much getting. Wow.
+    			indegreeOfVertex[vertices.indexOf(neighborsOfVI.get(j))]+=1;
+    		}
+    		
+    	}    	
+    	//We now have a valid vertices to start our searches from	
+    	
+    	//So for each vertex
+    	for(int i=0;i<vertices.size();i++)
+    	{
+    		//System.out.println(vertices.indexOf(i));
+    		//If the indegree of it is 0
+    		if(indegreeOfVertex[i]==0)
+    		{
+    			//Call the method that returns all possible topsorts from it which is alltopsorts
+    			//List<List<Vertex<V>>> topSorts=someMethod(vertices.get(i),g);
+    			
+    			//So we need to find all topological sorts that can happen after this one so we
+    			//make a new graph that has had this vertex removed and call alltopsort on it.
+    			IGraph<V,E> g2 = new Graph<V,E>(g.isDirectedGraph());
+    			List<Vertex<V>>tempVList=g.getVertices();
+    			
+    			//So for all vertices
+    			for(int vertexI=0;vertexI<tempVList.size();vertexI++)
+    			{
+    				//Check if they are the same vertex and add it if isn't
+    				if(tempVList.get(vertexI)!=vertices.get(i))
+    				{
+    					g2.addVertex(tempVList.get(vertexI).getVertexName(), tempVList.get(vertexI).getVertexData());
+    				}
+    			}
+    			
+    			//repeat the above for edges looking to see if this is an edge containg the vertex we are removing from the cloing process
+    			List<Edge<E>>tempEList=g.getEdges();
+    			for(int edgeI=0;edgeI<tempEList.size();edgeI++)
+    			{
+    				if(tempEList.get(edgeI).getVertexName1()!=vertices.get(i).getVertexName()&&tempEList.get(edgeI).getVertexName2()!=vertices.get(i).getVertexName())
+    				{
+    					g2.addEdge(tempEList.get(edgeI).getVertexName1(), tempEList.get(edgeI).getVertexName2(), tempEList.get(edgeI).getEdgeData());
+    				}
+    			}
+    			
+    			
+    			List<List<Vertex<V>>> topSorts=AllTopologicalSort(g2);
+    			if(topSorts.size()==0)
+    			{
+    				List<Vertex<V>> shortTemp=new ArrayList<Vertex<V>>();
+    				shortTemp.add(vertices.get(i));
+    				returnList.add(shortTemp);
+    			}
+    			//then for each topsorted list that can follow
+    			for(int j=0;j<topSorts.size();j++)
+    			{
+    				//Make a temp list that will be added to the return list
+    				List<Vertex<V>> temp=new ArrayList<Vertex<V>>();
+    				
+    				//Add this indegree vertex
+    				temp.add(vertices.get(i));
+    				
+    				//Then add each element of the list
+    				for(int k=0;k<topSorts.get(j).size();k++)
+    				{
+    					temp.add(topSorts.get(j).get(k));
+    				}
+    				returnList.add(temp);
+    			}
+    		}
+    	}
+    	
+    	return returnList;
+    }
+    
+    /**
+     * 
+     * @param g
+     * @return
+     */
+    public static <V, E extends IWeight> IGraph<V, E> Kruscal(IGraph<V, E> g )
+    {
+        //Make the edgeless graph of all little vertices
+    	IGraph<V,E > returnTree = new Graph<V,E>(false);
+    	List<Vertex<V>> gVertices=g.getVertices();
+    	
+    	for(int i=0;i<gVertices.size();i++)
+    	{
+    		returnTree.addVertex(gVertices.get(i).getVertexName(), gVertices.get(i).getVertexData());
+    	}
+    	//Make a sorted list of all edges
+    	List<Edge<E>> edges=g.getEdges();
+    	mySort(edges);
+    	
+    	//Look at the smallest edge that hasn't been added or disqualified by the below
+    	//Edges at this point is sorted smallest first, so whatever is at index i is the smallest unproccessed edge
+    	//For each edge
+    	for(int i=0;i<edges.size();i++)
+    	{
+        	
+    		//check to see if this new edge would make a cycle in the graph
+        	boolean createsCycle=true;
+        	//This helper method checks to see if the second vertex can be reached by the first, If the two vertices can already
+        	//reach eachother than adding this edge would create a cycle.
+        	//System.out.println("beofre cycle checker");
+        	createsCycle=cycleChecker(edges.get(i).getVertexName1(),edges.get(i).getVertexName2(),returnTree);
+        	//System.out.println("after cycle checker");
+        	//if not, add it to the new graph.
+    		if(!createsCycle)
+    		{
+    			returnTree.addEdge(edges.get(i).getVertexName1(), edges.get(i).getVertexName2(), edges.get(i).getEdgeData());
+    			//System.out.println("Added edgde");
+    		}
+    		if(returnTree.getEdges().size()+1==returnTree.getVertices().size())break;
+    	}
+    	
+    	
+    	return returnTree; // Dummy return - replace this.
+    }
+   
+    /**
+     * A helper method that does a recursive dfs on the neighbors of vertex source
+     * @param stack The stack to push deadends to
+     * @param graph The graph that is being sorted
+     * @param source The vertxes whose neighbors that we will search
+     */
+    private static <V, E>void myDfs(Stack<IGraph.Vertex<V>> stack,IGraph<V, E> graph, IGraph.Vertex<V> source)
+    {
+    	//Gather a list of all neighbors of the source vertex as these will be paths for the dfs
+    	//System.out.println("I have neighbors");
+    	List<Vertex<V>> neighbors = graph.getNeighbors(source.getVertexName());
+    	//System.out.println("They are ");
+//    	for(int test=0;test<neighbors.size();test++)
+//    	{
+//    		System.out.println(neighbors.get(test).getVertexName());
+//    	}
+    	//For each of the neighbors, if it has any
+    	for(int i=0;i<neighbors.size();i++)
+    	{
+    		//Look and see if it is already on the stack
+    		if(!stack.contains(neighbors.get(i)))
+    		{
+    			//If not, then go down deeper
+    			myDfs(stack, graph, neighbors.get(i));
+    		}
+    	}
+    	//Once all neighbors have been searched, than there are no nodes deep than this so we must go up
+    	// and before we leave, put this vertex on the stack so we know it is done and it wont be searched or added
+    	//by dfs again.
+    	stack.push(source);
+    }
+
+    //Basic linear sort. Might change. This comment is proof of want
+    private static <E extends IWeight>void mySort(List<Edge<E>> list)
+    {
+    	//For each edge
+    	for(int i=0;i<list.size();i++)
+    	{
+    		//for each edge after i
+    		for(int j=i;j<list.size();j++)
+    		{
+    			//If the edge at index j is less than the edge at index i, swap them.
+    			if(Double.compare(list.get(i).getEdgeData().getWeight(),list.get(j).getEdgeData().getWeight())>0)
+    			{
+    				Edge<E> temp=list.get(i);
+    				list.set(i, list.get(j));
+    				list.set(j,temp);
+    			}
+    		}
+    	}
+    }
+    /**
+     * Helper method that checks if adding an edge between the two vertices would create a cycle. It does this
+     * by seeing if the second vertex can already be reached from the first. If it can than adding an edge
+     * betwen them would create another path and that would make the graph cyclic and not a tree. We don't want that.
+     * @param vertex1 Vertex to start check from
+     * @param vertex2 Vertex to check for, shouldn't be reachable yet.
+     * @param graph Tree we are looking in
+     * @return	True if there would be a cycle, false if there wouldn't
+     */
+    private static <V,E> boolean cycleChecker(String vertex1,String vertex2,IGraph<V,E> graph)
+    {
+    	//What I did here is re-used my dfs method as it puts all the verties that are reacheable on 
+    	//a stack using dfs. This would let me know if the two are connected as it would be reachable
+    	//so if the stack contains the vertex, we don't want to use the edge I am testing.
+    	Stack<Vertex<V>> stack=new Stack<Vertex<V>>();
+    	//System.out.println(stack.toString());
+    	//myDfs(stack,graph,graph.getVertex(vertex1));
+    	
+    	//System.out.println(stack.toString());
+    	return stack.contains(graph.getVertex(vertex2));
+    }
+    
+}
