@@ -231,7 +231,37 @@ public class GraphAlgorithms
     	
     	return returnTree; // Dummy return - replace this.
     }
-   
+    
+    
+    /**
+     * Find the shortest path between two nodes in a graph
+     * @param g graph to find shortest path within
+     * @param vertexStart Source vertex to being search from
+     * @param vertexEnd Destination vertex to find path to
+     * @return List containing edges in order from vertexStart to vertexEnd that form the shortes path.
+     */
+    public static <V, E extends IWeight> List<Edge<E>> ShortestPath(IGraph<V, E> g, String vertexStart, String vertexEnd)
+    {
+    	/*
+		 * Basic outline of plan for development
+		 * 1. check for cases that prevent a shortest path
+		 * 		a. Graph is empty/null
+		 * 		b. Either vertex is null
+		 * 2. Use Dijkstra's to find shortest path
+		 * 		a. Make list of all vertices to use as unprocessed/unvisited nodes
+		 * 		b. Make list with indices of vertices in vertex list for distances
+		 * 		c. Set all distances to inf
+		 * 		d. Set distance for vertexStart to 0
+		 * 3. Put edges of shortest path into list
+		 * 4. Return list 
+		 */
+    	
+    	return null;
+    	
+    }
+    
+    
+    
     /**
      * A helper method that does a recursive dfs on the neighbors of vertex source
      * @param stack The stack to push deadends to
